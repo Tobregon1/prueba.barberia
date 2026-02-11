@@ -56,6 +56,25 @@ app.get('/', (req, res) => {
     });
 });
 
+// Ruta de salud para verificar conexión a BD
+app.get('/api/health', async (req, res) => {
+    try {
+        const pool = (await import('./src/config/dbConfig.js')).default;
+        const [rows] = await pool.query('SELECT 1 as connection');
+        res.json({
+            status: 'ok',
+            database: 'connected',
+            message: 'El backend está funcionando y conectado a la base de datos'
+        });
+    } catch (error) {
+        res.status(500).json({
+            status: 'error',
+            database: 'disconnected',
+            message: error.message
+        });
+    }
+});
+
 // Manejo de errores
 app.use((err, req, res, next) => {
     console.error(err.stack);
