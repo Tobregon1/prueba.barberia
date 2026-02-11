@@ -122,7 +122,11 @@ function GestionEmpleados() {
       limpiarForm();
       setTimeout(() => setMensaje(''), 3000);
     } catch (error) {
-      alert('Error al guardar empleado: ' + (error.response?.data?.error || error.message));
+      console.error('Error completo:', error);
+      const errorMsg = error.response?.data?.error || error.message;
+      const details = error.response?.data?.details ? `\n\nDetalles: ${error.response.data.details}` : '';
+      const hint = error.response?.data?.hint ? `\n\nSugerencia: ${error.response.data.hint}` : '';
+      alert(`Error al guardar empleado: ${errorMsg}${details}${hint}`);
     }
   };
 
@@ -137,9 +141,12 @@ function GestionEmpleados() {
     // Si hay una foto existente, mostrarla como vista previa
     if (empleado.foto) {
       const baseUrl = import.meta.env.VITE_API_URL ? import.meta.env.VITE_API_URL.split('/api')[0] : 'http://localhost:3000';
+      const cleanBaseUrl = baseUrl.endsWith('/') ? baseUrl.slice(0, -1) : baseUrl;
+      const cleanFotoPath = empleado.foto.startsWith('/') ? empleado.foto : `/${empleado.foto}`;
+
       const previewUrl = empleado.foto.startsWith('http')
         ? empleado.foto
-        : `${baseUrl}${empleado.foto.startsWith('/') ? '' : '/'}${empleado.foto}`;
+        : `${cleanBaseUrl}${cleanFotoPath}`;
       setVistaPrevia(previewUrl);
     }
     setMostrarForm(true);
@@ -316,7 +323,9 @@ function GestionEmpleados() {
                     <td>
                       {empleado.foto ? (
                         <img
-                          src={empleado.foto.startsWith('http') ? empleado.foto : `${import.meta.env.VITE_API_URL ? import.meta.env.VITE_API_URL.split('/api')[0] : 'http://localhost:3000'}${empleado.foto}`}
+                          src={empleado.foto.startsWith('http')
+                            ? empleado.foto
+                            : `${(import.meta.env.VITE_API_URL ? import.meta.env.VITE_API_URL.split('/api')[0] : 'http://localhost:3000').replace(/\/$/, '')}/${empleado.foto.replace(/^\//, '')}`}
                           alt={empleado.nombre}
                           style={{
                             width: '50px',

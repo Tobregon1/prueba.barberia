@@ -212,7 +212,7 @@ const adminController = {
             res.status(500).json({
                 error: 'Error al subir la foto a Supabase',
                 details: error.message || error,
-                hint: 'Verifica que el bucket "empleados" sea público y las credenciales sean correctas.'
+                hint: 'IMPORTANTE: Debes crear un bucket llamado "empleados" en Supabase Storage y marcarlo como PUBLIC.'
             });
         }
     },
