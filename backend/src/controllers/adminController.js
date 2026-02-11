@@ -9,6 +9,8 @@ import Venta from '../models/Venta.js';
 import jwt from 'jsonwebtoken';
 import { validationResult } from 'express-validator';
 import { enviarEmailRecibo } from '../services/emailService.js';
+import { supabaseService } from '../services/supabaseService.js';
+import path from 'path';
 
 const adminController = {
     // Login de administrador
@@ -193,16 +195,17 @@ const adminController = {
                 return res.status(400).json({ error: 'No se ha proporcionado ningún archivo' });
             }
 
-            // Generar URL relativa para guardar en la base de datos
-            // Si estamos en Vercel, la foto se guardó en /tmp (no es accesible vía URL estática)
-            // Por ahora, devolvemos una URL de placeholder o la misma si se desea intentar servirla
-            const isVercel = process.env.VERCEL || process.env.NODE_ENV === 'production';
-            const fotoUrl = isVercel ? `/uploads/empleados/${req.file.filename}` : `/uploads/empleados/${req.file.filename}`;
+            // Generar nombre de archivo único
+            const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+            const fileName = `empleado-${uniqueSuffix}${path.extname(req.file.originalname)}`;
+
+            // Subir a Supabase
+            const fotoUrl = await supabaseService.subirArchivo(req.file.buffer, fileName);
 
             res.json({
-                message: 'Foto subida exitosamente',
+                message: 'Foto subida exitosamente a Supabase',
                 url: fotoUrl,
-                filename: req.file.filename
+                filename: fileName
             });
         } catch (error) {
             console.error('Error al subir foto:', error);
