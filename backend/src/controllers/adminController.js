@@ -200,7 +200,7 @@ const adminController = {
             const fileName = `empleado-${uniqueSuffix}${path.extname(req.file.originalname)}`;
 
             // Subir a Supabase
-            const fotoUrl = await supabaseService.subirArchivo(req.file.buffer, fileName);
+            const fotoUrl = await supabaseService.subirArchivo(req.file.buffer, fileName, req.file.mimetype);
 
             res.json({
                 message: 'Foto subida exitosamente a Supabase',
@@ -209,7 +209,11 @@ const adminController = {
             });
         } catch (error) {
             console.error('Error al subir foto:', error);
-            res.status(500).json({ error: 'Error al subir la foto' });
+            res.status(500).json({
+                error: 'Error al subir la foto a Supabase',
+                details: error.message || error,
+                hint: 'Verifica que el bucket "empleados" sea público y las credenciales sean correctas.'
+            });
         }
     },
 

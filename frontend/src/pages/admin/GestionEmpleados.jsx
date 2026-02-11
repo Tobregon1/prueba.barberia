@@ -137,7 +137,10 @@ function GestionEmpleados() {
     // Si hay una foto existente, mostrarla como vista previa
     if (empleado.foto) {
       const baseUrl = import.meta.env.VITE_API_URL ? import.meta.env.VITE_API_URL.split('/api')[0] : 'http://localhost:3000';
-      setVistaPrevia(`${baseUrl}${empleado.foto}`);
+      const previewUrl = empleado.foto.startsWith('http')
+        ? empleado.foto
+        : `${baseUrl}${empleado.foto.startsWith('/') ? '' : '/'}${empleado.foto}`;
+      setVistaPrevia(previewUrl);
     }
     setMostrarForm(true);
   };
