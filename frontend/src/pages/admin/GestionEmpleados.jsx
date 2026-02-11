@@ -9,7 +9,7 @@ function GestionEmpleados() {
   const [mensaje, setMensaje] = useState('');
   const [mostrarHorarios, setMostrarHorarios] = useState(null);
   const [horarios, setHorarios] = useState([]);
-  
+
   const [formData, setFormData] = useState({
     nombre: '',
     cedula: '',
@@ -62,15 +62,15 @@ function GestionEmpleados() {
         alert('Por favor selecciona un archivo de imagen válido (JPG, PNG, etc.)');
         return;
       }
-      
+
       // Validar tamaño (máximo 5MB)
       if (file.size > 5 * 1024 * 1024) {
         alert('La imagen no debe superar los 5MB');
         return;
       }
-      
+
       setArchivoFoto(file);
-      
+
       // Crear vista previa
       const reader = new FileReader();
       reader.onloadend = () => {
@@ -101,16 +101,16 @@ function GestionEmpleados() {
       if (archivoFoto) {
         const formDataArchivo = new FormData();
         formDataArchivo.append('foto', archivoFoto);
-        
+
         const responseSubida = await empleadosAPI.subirFoto(formDataArchivo);
         fotoUrl = responseSubida.data.url;
       }
-      
+
       const datosEmpleado = {
         ...formData,
         foto: fotoUrl
       };
-      
+
       if (empleadoEdit) {
         await empleadosAPI.actualizar(empleadoEdit.id, datosEmpleado);
         setMensaje('Empleado actualizado exitosamente');
@@ -136,14 +136,15 @@ function GestionEmpleados() {
     });
     // Si hay una foto existente, mostrarla como vista previa
     if (empleado.foto) {
-      setVistaPrevia(`http://localhost:3000${empleado.foto}`);
+      const baseUrl = import.meta.env.VITE_API_URL ? import.meta.env.VITE_API_URL.split('/api')[0] : 'http://localhost:3000';
+      setVistaPrevia(`${baseUrl}${empleado.foto}`);
     }
     setMostrarForm(true);
   };
 
   const eliminarEmpleado = async (id) => {
     if (!confirm('¿Estás seguro de eliminar este empleado? Esto desactivará al empleado.')) return;
-    
+
     try {
       await empleadosAPI.eliminar(id);
       setMensaje('Empleado eliminado');
@@ -175,14 +176,14 @@ function GestionEmpleados() {
 
   return (
     <div className="fade-in">
-      <div style={{ 
-        display: 'flex', 
-        justifyContent: 'space-between', 
+      <div style={{
+        display: 'flex',
+        justifyContent: 'space-between',
         alignItems: 'center',
         marginBottom: '2rem'
       }}>
         <h2 style={{ margin: 0 }}>Gestión de Empleados</h2>
-        <button 
+        <button
           onClick={() => setMostrarForm(!mostrarForm)}
           className="btn btn-primary"
         >
@@ -230,7 +231,7 @@ function GestionEmpleados() {
                 />
               </div>
             </div>
-            
+
             <div className="form-group">
               <label>Foto del Empleado (opcional)</label>
               <input
@@ -247,9 +248,9 @@ function GestionEmpleados() {
               </small>
               {vistaPrevia && (
                 <div style={{ marginTop: '1rem' }}>
-                  <img 
-                    src={vistaPrevia} 
-                    alt="Vista previa" 
+                  <img
+                    src={vistaPrevia}
+                    alt="Vista previa"
                     style={{
                       maxWidth: '200px',
                       maxHeight: '200px',
@@ -311,8 +312,8 @@ function GestionEmpleados() {
                     <td>{empleado.id}</td>
                     <td>
                       {empleado.foto ? (
-                        <img 
-                          src={`http://localhost:3000${empleado.foto}`} 
+                        <img
+                          src={empleado.foto.startsWith('http') ? empleado.foto : `${import.meta.env.VITE_API_URL ? import.meta.env.VITE_API_URL.split('/api')[0] : 'http://localhost:3000'}${empleado.foto}`}
                           alt={empleado.nombre}
                           style={{
                             width: '50px',

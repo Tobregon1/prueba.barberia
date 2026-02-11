@@ -6,16 +6,28 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Configuración de almacenamiento
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, path.join(__dirname, '../../uploads/empleados'));
-    },
-    filename: (req, file, cb) => {
-        // Generar nombre único: timestamp-randomnumber.extension
-        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-        cb(null, 'empleado-' + uniqueSuffix + path.extname(file.originalname));
-    }
-});
+// NOTA: Vercel tiene un sistema de archivos de solo lectura. 
+// Usamos /tmp para evitar errores, pero las fotos no persistirán entre reinicios.
+const isVercel = process.env.VERCEL || process.env.NODE_ENV === 'production';
+const storage = isVercel
+    ? multer.diskStorage({
+        destination: (req, file, cb) => {
+            cb(null, '/tmp');
+        },
+        filename: (req, file, cb) => {
+            const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+            cb(null, 'empleado-' + uniqueSuffix + path.extname(file.originalname));
+        }
+    })
+    : multer.diskStorage({
+        destination: (req, file, cb) => {
+            cb(null, path.join(__dirname, '../../uploads/empleados'));
+        },
+        filename: (req, file, cb) => {
+            const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+            cb(null, 'empleado-' + uniqueSuffix + path.extname(file.originalname));
+        }
+    });
 
 // Filtro para validar tipo de archivo
 const fileFilter = (req, file, cb) => {

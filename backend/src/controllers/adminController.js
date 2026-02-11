@@ -75,10 +75,10 @@ const adminController = {
 
             const servicioId = await Servicio.crear(req.body);
             const servicio = await Servicio.obtenerPorId(servicioId);
-            
-            res.status(201).json({ 
+
+            res.status(201).json({
                 message: 'Servicio creado exitosamente',
-                servicio 
+                servicio
             });
         } catch (error) {
             console.error('Error al crear servicio:', error);
@@ -90,11 +90,11 @@ const adminController = {
         try {
             const { id } = req.params;
             const actualizado = await Servicio.actualizar(id, req.body);
-            
+
             if (!actualizado) {
                 return res.status(404).json({ error: 'Servicio no encontrado' });
             }
-            
+
             res.json({ message: 'Servicio actualizado exitosamente' });
         } catch (error) {
             console.error('Error al actualizar servicio:', error);
@@ -106,11 +106,11 @@ const adminController = {
         try {
             const { id } = req.params;
             const eliminado = await Servicio.eliminar(id);
-            
+
             if (!eliminado) {
                 return res.status(404).json({ error: 'Servicio no encontrado' });
             }
-            
+
             res.json({ message: 'Servicio eliminado exitosamente' });
         } catch (error) {
             console.error('Error al eliminar servicio:', error);
@@ -144,10 +144,10 @@ const adminController = {
 
             const empleadoId = await Empleado.crear(req.body);
             const empleado = await Empleado.obtenerPorId(empleadoId);
-            
-            res.status(201).json({ 
+
+            res.status(201).json({
                 message: 'Empleado creado exitosamente',
-                empleado 
+                empleado
             });
         } catch (error) {
             console.error('Error al crear empleado:', error);
@@ -159,11 +159,11 @@ const adminController = {
         try {
             const { id } = req.params;
             const actualizado = await Empleado.actualizar(id, req.body);
-            
+
             if (!actualizado) {
                 return res.status(404).json({ error: 'Empleado no encontrado' });
             }
-            
+
             res.json({ message: 'Empleado actualizado exitosamente' });
         } catch (error) {
             console.error('Error al actualizar empleado:', error);
@@ -175,11 +175,11 @@ const adminController = {
         try {
             const { id } = req.params;
             const eliminado = await Empleado.eliminar(id);
-            
+
             if (!eliminado) {
                 return res.status(404).json({ error: 'Empleado no encontrado' });
             }
-            
+
             res.json({ message: 'Empleado eliminado exitosamente' });
         } catch (error) {
             console.error('Error al eliminar empleado:', error);
@@ -194,9 +194,12 @@ const adminController = {
             }
 
             // Generar URL relativa para guardar en la base de datos
-            const fotoUrl = `/uploads/empleados/${req.file.filename}`;
+            // Si estamos en Vercel, la foto se guardó en /tmp (no es accesible vía URL estática)
+            // Por ahora, devolvemos una URL de placeholder o la misma si se desea intentar servirla
+            const isVercel = process.env.VERCEL || process.env.NODE_ENV === 'production';
+            const fotoUrl = isVercel ? `/uploads/empleados/${req.file.filename}` : `/uploads/empleados/${req.file.filename}`;
 
-            res.json({ 
+            res.json({
                 message: 'Foto subida exitosamente',
                 url: fotoUrl,
                 filename: req.file.filename
@@ -211,14 +214,14 @@ const adminController = {
     async obtenerTodasCitas(req, res) {
         try {
             const { estado } = req.query;
-            
+
             let citas;
             if (estado) {
                 citas = await Cita.obtenerPorEstado(estado);
             } else {
                 citas = await Cita.obtenerTodas();
             }
-            
+
             res.json(citas);
         } catch (error) {
             console.error('Error al obtener citas:', error);
@@ -231,11 +234,11 @@ const adminController = {
             const { id } = req.params;
             const cita = await Cita.obtenerPorId(id);
             const confirmada = await Cita.confirmar(id);
-            
+
             if (!confirmada) {
                 return res.status(404).json({ error: 'Cita no encontrada' });
             }
-            
+
             res.json({ message: 'Cita confirmada exitosamente' });
         } catch (error) {
             console.error('Error al confirmar cita:', error);
@@ -246,17 +249,17 @@ const adminController = {
     async cancelarCita(req, res) {
         try {
             const { id } = req.params;
-            
+
             // Verificar si la cita estaba completada para eliminar la venta
             const cita = await Cita.obtenerPorId(id);
             const estabaCompletada = cita && cita.estado === 'completada';
-            
+
             const cancelada = await Cita.cancelar(id);
-            
+
             if (!cancelada) {
                 return res.status(404).json({ error: 'Cita no encontrada' });
             }
-            
+
             // Si la cita estaba completada, eliminar la venta registrada
             if (estabaCompletada) {
                 try {
@@ -266,7 +269,7 @@ const adminController = {
                     console.error('Error al eliminar venta:', ventaError);
                 }
             }
-            
+
             res.json({ message: 'Cita cancelada exitosamente' });
         } catch (error) {
             console.error('Error al cancelar cita:', error);
@@ -278,13 +281,13 @@ const adminController = {
         try {
             const { id } = req.params;
             const cita = await Cita.obtenerPorId(id);
-            
+
             if (!cita) {
                 return res.status(404).json({ error: 'Cita no encontrada' });
             }
 
             const completada = await Cita.completar(id);
-            
+
             if (!completada) {
                 return res.status(500).json({ error: 'Error al completar cita' });
             }
@@ -293,11 +296,11 @@ const adminController = {
             try {
                 // Verificar si ya existe una venta para esta cita
                 const ventaExiste = await Venta.existePorCita(id);
-                
+
                 if (!ventaExiste) {
                     // Obtener el precio del servicio
                     const servicio = await Servicio.obtenerPorId(cita.servicio_id);
-                    
+
                     if (servicio) {
                         await Venta.crear(
                             id,
@@ -322,7 +325,7 @@ const adminController = {
                 console.error('Error al enviar email de recibo:', emailError);
                 // No fallar la operación si el email falla
             }
-            
+
             res.json({ message: 'Cita completada exitosamente' });
         } catch (error) {
             console.error('Error al completar cita:', error);
@@ -345,9 +348,9 @@ const adminController = {
         try {
             const horarioId = await Horario.crear(req.body);
 
-            res.status(201).json({ 
+            res.status(201).json({
                 message: 'Horario creado exitosamente',
-                id: horarioId 
+                id: horarioId
             });
         } catch (error) {
             console.error('Error al crear horario:', error);
@@ -362,11 +365,11 @@ const adminController = {
         try {
             const { id } = req.params;
             const actualizado = await Horario.actualizar(id, req.body);
-            
+
             if (!actualizado) {
                 return res.status(404).json({ error: 'Horario no encontrado' });
             }
-            
+
             res.json({ message: 'Horario actualizado exitosamente' });
         } catch (error) {
             console.error('Error al actualizar horario:', error);
@@ -378,11 +381,11 @@ const adminController = {
         try {
             const { id } = req.params;
             const eliminado = await Horario.eliminar(id);
-            
+
             if (!eliminado) {
                 return res.status(404).json({ error: 'Horario no encontrado' });
             }
-            
+
             res.json({ message: 'Horario eliminado exitosamente' });
         } catch (error) {
             console.error('Error al eliminar horario:', error);
@@ -405,9 +408,9 @@ const adminController = {
         try {
             const bloqueoId = await Bloqueo.crear(req.body);
 
-            res.status(201).json({ 
+            res.status(201).json({
                 message: 'Bloqueo creado exitosamente',
-                id: bloqueoId 
+                id: bloqueoId
             });
         } catch (error) {
             console.error('Error al crear bloqueo:', error);
@@ -419,11 +422,11 @@ const adminController = {
         try {
             const { id } = req.params;
             const actualizado = await Bloqueo.actualizar(id, req.body);
-            
+
             if (!actualizado) {
                 return res.status(404).json({ error: 'Bloqueo no encontrado' });
             }
-            
+
             res.json({ message: 'Bloqueo actualizado exitosamente' });
         } catch (error) {
             console.error('Error al actualizar bloqueo:', error);
@@ -435,11 +438,11 @@ const adminController = {
         try {
             const { id } = req.params;
             const eliminado = await Bloqueo.eliminar(id);
-            
+
             if (!eliminado) {
                 return res.status(404).json({ error: 'Bloqueo no encontrado' });
             }
-            
+
             res.json({ message: 'Bloqueo eliminado exitosamente' });
         } catch (error) {
             console.error('Error al eliminar bloqueo:', error);
@@ -461,9 +464,9 @@ const adminController = {
     async crearDiaFestivo(req, res) {
         try {
             const diaId = await DiaFestivo.crear(req.body);
-            res.status(201).json({ 
+            res.status(201).json({
                 message: 'Día festivo creado exitosamente',
-                id: diaId 
+                id: diaId
             });
         } catch (error) {
             console.error('Error al crear día festivo:', error);
@@ -475,11 +478,11 @@ const adminController = {
         try {
             const { id } = req.params;
             const eliminado = await DiaFestivo.eliminar(id);
-            
+
             if (!eliminado) {
                 return res.status(404).json({ error: 'Día festivo no encontrado' });
             }
-            
+
             res.json({ message: 'Día festivo eliminado exitosamente' });
         } catch (error) {
             console.error('Error al eliminar día festivo:', error);
