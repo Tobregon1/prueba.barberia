@@ -20,16 +20,17 @@ export const supabaseService = {
      * @param {string} bucketName - Nombre del bucket (default: 'empleados')
      * @returns {Promise<string>} - URL pública del archivo
      */
-    async subirArchivo(fileBuffer, fileName, bucketName = 'empleados') {
+    async subirArchivo(fileBuffer, fileName, mimetype, bucketName = 'empleados') {
         try {
             const { data, error } = await supabase.storage
                 .from(bucketName)
                 .upload(fileName, fileBuffer, {
-                    contentType: 'image/jpeg', // O detectar dinámicamente
+                    contentType: mimetype || 'image/jpeg',
                     upsert: true
                 });
 
             if (error) {
+                console.error('Supabase Error Details:', JSON.stringify(error, null, 2));
                 throw error;
             }
 
@@ -40,8 +41,8 @@ export const supabaseService = {
 
             return publicUrl;
         } catch (error) {
-            console.error('Error en Supabase Storage:', error);
-            throw new Error('Error al subir archivo a la nube');
+            console.error('Error completo en Supabase Storage:', error);
+            throw error;
         }
     }
 };
