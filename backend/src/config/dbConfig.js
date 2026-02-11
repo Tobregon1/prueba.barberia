@@ -13,7 +13,10 @@ const pool = mysql.createPool({
     waitForConnections: true,
     connectionLimit: 10,
     queueLimit: 0,
-    timezone: '+00:00' // Usar UTC en la conexión, manejar zona horaria en la aplicación
+    timezone: '+00:00',
+    ssl: process.env.DB_HOST && process.env.DB_HOST !== 'localhost' ? {
+        rejectUnauthorized: false
+    } : undefined
 });
 
 // Probar conexión
