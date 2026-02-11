@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { serviciosAPI } from '../services/api';
+import { formatCurrency } from '../utils/formatters';
 
 function Home() {
   const [servicios, setServicios] = useState([]);
@@ -26,7 +27,7 @@ function Home() {
       {/* Navbar Premium */}
       <nav className="navbar">
         <div className="navbar-content">
-          <h1>HIGHBURY BARBER</h1>
+          <h1><BARBERSHOP></BARBERSHOP></h1>
           <nav>
             <Link to="/" className="active">Inicio</Link>
             <Link to="/reservar">Reservar Cita</Link>
@@ -61,7 +62,7 @@ function Home() {
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
                   <div>
                     <div className="price">
-                      ${parseFloat(servicio.precio).toLocaleString('es-AR')}
+                      {formatCurrency(servicio.precio)}
                     </div>
                     <div className="duration">
                       ⏱️ {servicio.duracion} minutos

@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { reportesAPI } from '../../services/api';
+import { formatCurrency } from '../../utils/formatters';
 import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
 function GestionReportes() {
@@ -7,7 +8,7 @@ function GestionReportes() {
   const [reporteData, setReporteData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [mensaje, setMensaje] = useState('');
-  
+
   // Fechas
   const hoy = new Date().toISOString().split('T')[0];
   const [fechaDiaria, setFechaDiaria] = useState(hoy);
@@ -92,13 +93,13 @@ function GestionReportes() {
   };
 
   const formatearMoneda = (valor) => {
-    return `$${Number(valor || 0).toLocaleString('es-CO')}`;
+    return formatCurrency(valor);
   };
 
   const formatearFechaParaGrafica = (fecha) => {
     try {
       if (!fecha) return 'N/A';
-      
+
       // Si la fecha ya viene como objeto Date o timestamp
       let dateObj;
       if (fecha instanceof Date) {
@@ -110,12 +111,12 @@ function GestionReportes() {
       } else {
         dateObj = new Date(fecha);
       }
-      
+
       if (isNaN(dateObj.getTime())) {
         return 'Fecha inválida';
       }
-      
-      return dateObj.toLocaleDateString('es-CO', {
+
+      return dateObj.toLocaleDateString('es-AR', {
         day: '2-digit',
         month: 'short'
       });
@@ -128,7 +129,7 @@ function GestionReportes() {
   const formatearFecha = (fecha) => {
     try {
       if (!fecha) return 'N/A';
-      
+
       let dateObj;
       if (fecha instanceof Date) {
         dateObj = fecha;
@@ -138,12 +139,12 @@ function GestionReportes() {
       } else {
         dateObj = new Date(fecha);
       }
-      
+
       if (isNaN(dateObj.getTime())) {
         return 'Fecha inválida';
       }
-      
-      return dateObj.toLocaleDateString('es-CO', {
+
+      return dateObj.toLocaleDateString('es-AR', {
         weekday: 'short',
         day: 'numeric',
         month: 'short'
@@ -173,9 +174,9 @@ function GestionReportes() {
       )}
 
       {/* Selector de tipo de reporte */}
-      <div style={{ 
-        display: 'flex', 
-        gap: '1rem', 
+      <div style={{
+        display: 'flex',
+        gap: '1rem',
         marginBottom: '2rem',
         borderBottom: '1px solid var(--neutral-gray)',
         paddingBottom: '1rem'
@@ -230,7 +231,7 @@ function GestionReportes() {
       {/* Selector de fechas */}
       <div className="card" style={{ marginBottom: '2rem' }}>
         <h3 style={{ marginBottom: '1rem' }}>Seleccionar Período</h3>
-        
+
         {tipoReporte === 'diario' && (
           <div style={{ display: 'flex', gap: '1rem', alignItems: 'flex-end' }}>
             <div style={{ flex: 1 }}>
@@ -367,10 +368,10 @@ function GestionReportes() {
                 {formatearMoneda(reporteData.total?.total_dinero)}
               </div>
               <div style={{ fontSize: '0.85rem', marginTop: '0.5rem', opacity: 0.8 }}>
-                COP
+                Pesos Argentinos (ARS)
               </div>
             </div>
-            
+
             <div className="card" style={{ background: 'var(--neutral-charcoal)' }}>
               <h4 style={{ marginBottom: '0.5rem', fontSize: '0.9rem', color: 'var(--neutral-silver)' }}>Total Servicios</h4>
               <div style={{ fontSize: '2rem', fontWeight: 'bold', color: 'var(--primary-gold)' }}>
@@ -388,7 +389,7 @@ function GestionReportes() {
                   {formatearMoneda((reporteData.total?.total_dinero || 0) / reporteData.porDia.length)}
                 </div>
                 <div style={{ fontSize: '0.85rem', marginTop: '0.5rem', color: 'var(--neutral-silver)' }}>
-                  COP/día
+                  ARS/día
                 </div>
               </div>
             )}
@@ -409,17 +410,17 @@ function GestionReportes() {
                   fechaLabel: formatearFechaParaGrafica(dia.fecha)
                 }))}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#444" />
-                  <XAxis 
+                  <XAxis
                     dataKey="fechaLabel"
                     stroke="#999"
                   />
-                  <YAxis 
+                  <YAxis
                     stroke="#999"
                     tickFormatter={(value) => `$${(value / 1000).toFixed(0)}k`}
                   />
-                  <Tooltip 
-                    contentStyle={{ 
-                      background: '#2a2a2a', 
+                  <Tooltip
+                    contentStyle={{
+                      background: '#2a2a2a',
                       border: '1px solid #d4af37',
                       borderRadius: '4px'
                     }}
@@ -432,10 +433,10 @@ function GestionReportes() {
                     }}
                   />
                   <Legend />
-                  <Line 
-                    type="monotone" 
-                    dataKey="total_dinero" 
-                    stroke="#d4af37" 
+                  <Line
+                    type="monotone"
+                    dataKey="total_dinero"
+                    stroke="#d4af37"
                     strokeWidth={3}
                     name="Ingresos"
                     dot={{ fill: '#d4af37', r: 4 }}
@@ -453,13 +454,13 @@ function GestionReportes() {
                 <BarChart data={reporteData.porEmpleado}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#444" />
                   <XAxis dataKey="empleado" stroke="#999" />
-                  <YAxis 
+                  <YAxis
                     stroke="#999"
                     tickFormatter={(value) => `$${(value / 1000).toFixed(0)}k`}
                   />
-                  <Tooltip 
-                    contentStyle={{ 
-                      background: '#2a2a2a', 
+                  <Tooltip
+                    contentStyle={{
+                      background: '#2a2a2a',
                       border: '1px solid #d4af37',
                       borderRadius: '4px'
                     }}
@@ -469,7 +470,7 @@ function GestionReportes() {
                   <Bar dataKey="total_ganado" fill="#d4af37" name="Ganancias" />
                 </BarChart>
               </ResponsiveContainer>
-              
+
               <div style={{ marginTop: '1.5rem' }}>
                 <table className="table">
                   <thead>
@@ -503,13 +504,13 @@ function GestionReportes() {
                 <BarChart data={reporteData.porServicio}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#444" />
                   <XAxis dataKey="servicio" stroke="#999" />
-                  <YAxis 
+                  <YAxis
                     stroke="#999"
                     tickFormatter={(value) => `$${(value / 1000).toFixed(0)}k`}
                   />
-                  <Tooltip 
-                    contentStyle={{ 
-                      background: '#2a2a2a', 
+                  <Tooltip
+                    contentStyle={{
+                      background: '#2a2a2a',
                       border: '1px solid #d4af37',
                       borderRadius: '4px'
                     }}
@@ -519,7 +520,7 @@ function GestionReportes() {
                   <Bar dataKey="total" fill="#64b5f6" name="Ingresos" />
                 </BarChart>
               </ResponsiveContainer>
-              
+
               <div style={{ marginTop: '1.5rem' }}>
                 <table className="table">
                   <thead>

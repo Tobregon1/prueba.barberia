@@ -8,7 +8,7 @@ function GestionBloqueos() {
   const [mostrarForm, setMostrarForm] = useState(false);
   const [bloqueoEdit, setBloqueoEdit] = useState(null);
   const [mensaje, setMensaje] = useState('');
-  
+
   const [formData, setFormData] = useState({
     empleado_id: '',
     fecha_inicio: '',
@@ -58,7 +58,7 @@ function GestionBloqueos() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (new Date(formData.fecha_inicio) > new Date(formData.fecha_fin)) {
       alert('La fecha de inicio no puede ser mayor a la fecha de fin');
       return;
@@ -94,7 +94,7 @@ function GestionBloqueos() {
 
   const eliminarBloqueo = async (id) => {
     if (!confirm('¿Estás seguro de eliminar este bloqueo?')) return;
-    
+
     try {
       await bloqueosAPI.eliminar(id);
       setMensaje('Bloqueo eliminado');
@@ -123,14 +123,14 @@ function GestionBloqueos() {
 
   return (
     <div className="fade-in">
-      <div style={{ 
-        display: 'flex', 
-        justifyContent: 'space-between', 
+      <div style={{
+        display: 'flex',
+        justifyContent: 'space-between',
         alignItems: 'center',
         marginBottom: '2rem'
       }}>
         <h2 style={{ margin: 0 }}>Gestión de Bloqueos</h2>
-        <button 
+        <button
           onClick={() => setMostrarForm(!mostrarForm)}
           className="btn btn-primary"
         >
@@ -197,7 +197,7 @@ function GestionBloqueos() {
                 />
               </div>
             </div>
-            
+
             <div className="form-group">
               <label>Motivo *</label>
               <select
@@ -260,8 +260,8 @@ function GestionBloqueos() {
                 <tr key={bloqueo.id}>
                   <td>{bloqueo.id}</td>
                   <td style={{ fontWeight: '600' }}>{getNombreEmpleado(bloqueo.empleado_id)}</td>
-                  <td>{new Date(bloqueo.fecha_inicio).toLocaleDateString('es-CO')}</td>
-                  <td>{new Date(bloqueo.fecha_fin).toLocaleDateString('es-CO')}</td>
+                  <td>{new Date(bloqueo.fecha_inicio).toLocaleDateString('es-AR')}</td>
+                  <td>{new Date(bloqueo.fecha_fin).toLocaleDateString('es-AR')}</td>
                   <td>
                     <span className="badge badge-warning">
                       {getMotivoLabel(bloqueo.motivo)}

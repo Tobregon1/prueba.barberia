@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { empleadosAPI, horariosAPI } from '../../services/api';
+import { getImageUrl } from '../../utils/formatters';
 
 function GestionEmpleados() {
   const [empleados, setEmpleados] = useState([]);
@@ -140,14 +141,7 @@ function GestionEmpleados() {
     });
     // Si hay una foto existente, mostrarla como vista previa
     if (empleado.foto) {
-      const baseUrl = import.meta.env.VITE_API_URL ? import.meta.env.VITE_API_URL.split('/api')[0] : 'http://localhost:3000';
-      const cleanBaseUrl = baseUrl.endsWith('/') ? baseUrl.slice(0, -1) : baseUrl;
-      const cleanFotoPath = empleado.foto.startsWith('/') ? empleado.foto : `/${empleado.foto}`;
-
-      const previewUrl = empleado.foto.startsWith('http')
-        ? empleado.foto
-        : `${cleanBaseUrl}${cleanFotoPath}`;
-      setVistaPrevia(previewUrl);
+      setVistaPrevia(getImageUrl(empleado.foto));
     }
     setMostrarForm(true);
   };
@@ -323,9 +317,7 @@ function GestionEmpleados() {
                     <td>
                       {empleado.foto ? (
                         <img
-                          src={empleado.foto.startsWith('http')
-                            ? empleado.foto
-                            : `${(import.meta.env.VITE_API_URL ? import.meta.env.VITE_API_URL.split('/api')[0] : 'http://localhost:3000').replace(/\/$/, '')}/${empleado.foto.replace(/^\//, '')}`}
+                          src={getImageUrl(empleado.foto)}
                           alt={empleado.nombre}
                           style={{
                             width: '50px',

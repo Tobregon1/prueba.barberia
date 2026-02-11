@@ -13,11 +13,11 @@ const formatearFecha = (fechaString) => {
     // Dividir la fecha en partes [año, mes, día]
     const partes = fechaString.split('-').map(n => parseInt(n, 10));
     if (partes.length !== 3) return 'Fecha inválida';
-    
+
     // Crear fecha local sin problemas de zona horaria
     const fecha = new Date(partes[0], partes[1] - 1, partes[2]);
-    
-    return fecha.toLocaleDateString('es-CO', {
+
+    return fecha.toLocaleDateString('es-AR', {
       weekday: 'short',
       day: 'numeric',
       month: 'short'
@@ -46,7 +46,7 @@ function GestionCitas() {
     if (busquedaNombre.trim() === '') {
       setCitasFiltradas(citas);
     } else {
-      const filtradas = citas.filter(cita => 
+      const filtradas = citas.filter(cita =>
         cita.cliente_nombre.toLowerCase().includes(busquedaNombre.toLowerCase()) ||
         cita.cliente_cedula.includes(busquedaNombre)
       );
@@ -91,9 +91,9 @@ function GestionCitas() {
 
   return (
     <div className="fade-in">
-      <div style={{ 
-        display: 'flex', 
-        justifyContent: 'space-between', 
+      <div style={{
+        display: 'flex',
+        justifyContent: 'space-between',
         alignItems: 'center',
         marginBottom: '2rem',
         gap: '1rem',
@@ -110,7 +110,7 @@ function GestionCitas() {
               placeholder="Nombre o cédula..."
               value={busquedaNombre}
               onChange={(e) => setBusquedaNombre(e.target.value)}
-              style={{ 
+              style={{
                 minWidth: '200px',
                 padding: '0.5rem',
                 borderRadius: '4px',
@@ -140,8 +140,8 @@ function GestionCitas() {
             <label style={{ color: 'var(--neutral-light)', fontWeight: '500' }}>
               Estado:
             </label>
-            <select 
-              value={filtroEstado} 
+            <select
+              value={filtroEstado}
               onChange={(e) => setFiltroEstado(e.target.value)}
               style={{ minWidth: '180px' }}
             >
@@ -156,8 +156,8 @@ function GestionCitas() {
       </div>
 
       {busquedaNombre && (
-        <div style={{ 
-          marginBottom: '1rem', 
+        <div style={{
+          marginBottom: '1rem',
           color: 'var(--neutral-silver)',
           fontSize: '0.9rem'
         }}>
@@ -193,8 +193,8 @@ function GestionCitas() {
             {citasFiltradas.length === 0 ? (
               <tr>
                 <td colSpan="8" style={{ textAlign: 'center', padding: '3rem', color: 'var(--neutral-silver)' }}>
-                  {busquedaNombre ? 
-                    `No se encontraron citas para "${busquedaNombre}"` : 
+                  {busquedaNombre ?
+                    `No se encontraron citas para "${busquedaNombre}"` :
                     `No hay citas ${filtroEstado ? `en estado "${filtroEstado}"` : 'registradas'}`
                   }
                 </td>
@@ -211,8 +211,8 @@ function GestionCitas() {
                   <td style={{ fontWeight: '500' }}>
                     {cita.cliente_telefono}
                   </td>
-                  <td style={{ 
-                    fontWeight: '600', 
+                  <td style={{
+                    fontWeight: '600',
                     fontSize: '0.95rem',
                     whiteSpace: 'nowrap',
                     padding: '1rem'
@@ -230,9 +230,9 @@ function GestionCitas() {
                     </span>
                   </td>
                   <td>
-                    <div style={{ 
-                      display: 'flex', 
-                      gap: '0.5rem', 
+                    <div style={{
+                      display: 'flex',
+                      gap: '0.5rem',
                       flexWrap: 'wrap',
                       justifyContent: 'center',
                       alignItems: 'center'
@@ -240,22 +240,22 @@ function GestionCitas() {
                       {/* Estado: PENDIENTE - Solo confirmar o cancelar */}
                       {cita.estado === 'pendiente' && (
                         <>
-                          <button 
+                          <button
                             onClick={() => cambiarEstado(cita.id, 'confirmar')}
-                            className="btn btn-primary" 
-                            style={{ 
-                              padding: '0.5rem 1rem', 
+                            className="btn btn-primary"
+                            style={{
+                              padding: '0.5rem 1rem',
                               fontSize: '0.85rem',
                               minWidth: '90px'
                             }}
                           >
                             ✓ Confirmar
                           </button>
-                          <button 
+                          <button
                             onClick={() => cambiarEstado(cita.id, 'cancelar')}
-                            className="btn btn-danger" 
-                            style={{ 
-                              padding: '0.5rem 1rem', 
+                            className="btn btn-danger"
+                            style={{
+                              padding: '0.5rem 1rem',
                               fontSize: '0.85rem',
                               minWidth: '90px'
                             }}
@@ -264,26 +264,26 @@ function GestionCitas() {
                           </button>
                         </>
                       )}
-                      
+
                       {/* Estado: CONFIRMADA - Completar o cancelar */}
                       {cita.estado === 'confirmada' && (
                         <>
-                          <button 
+                          <button
                             onClick={() => cambiarEstado(cita.id, 'completar')}
-                            className="btn btn-primary" 
-                            style={{ 
-                              padding: '0.5rem 1rem', 
+                            className="btn btn-primary"
+                            style={{
+                              padding: '0.5rem 1rem',
                               fontSize: '0.85rem',
                               minWidth: '90px'
                             }}
                           >
                             ✓ Completar
                           </button>
-                          <button 
+                          <button
                             onClick={() => cambiarEstado(cita.id, 'cancelar')}
-                            className="btn btn-danger" 
-                            style={{ 
-                              padding: '0.5rem 1rem', 
+                            className="btn btn-danger"
+                            style={{
+                              padding: '0.5rem 1rem',
                               fontSize: '0.85rem',
                               minWidth: '90px'
                             }}
@@ -292,14 +292,14 @@ function GestionCitas() {
                           </button>
                         </>
                       )}
-                      
+
                       {/* Estado: COMPLETADA - Solo cancelar (para corregir errores) */}
                       {cita.estado === 'completada' && (
-                        <button 
+                        <button
                           onClick={() => cambiarEstado(cita.id, 'cancelar')}
-                          className="btn btn-danger" 
-                          style={{ 
-                            padding: '0.5rem 1rem', 
+                          className="btn btn-danger"
+                          style={{
+                            padding: '0.5rem 1rem',
                             fontSize: '0.85rem',
                             minWidth: '90px'
                           }}
@@ -307,14 +307,14 @@ function GestionCitas() {
                           ✗ Cancelar
                         </button>
                       )}
-                      
+
                       {/* Estado: CANCELADA - Reactivar como confirmada */}
                       {cita.estado === 'cancelada' && (
-                        <button 
+                        <button
                           onClick={() => cambiarEstado(cita.id, 'confirmar')}
-                          className="btn btn-primary" 
-                          style={{ 
-                            padding: '0.5rem 1rem', 
+                          className="btn btn-primary"
+                          style={{
+                            padding: '0.5rem 1rem',
                             fontSize: '0.85rem',
                             minWidth: '90px'
                           }}
@@ -331,8 +331,8 @@ function GestionCitas() {
         </table>
       </div>
 
-      <div style={{ 
-        marginTop: '2rem', 
+      <div style={{
+        marginTop: '2rem',
         padding: '1.5rem',
         background: 'var(--neutral-dark)',
         borderRadius: '6px',
@@ -389,12 +389,12 @@ function AdminDashboard() {
   useEffect(() => {
     const token = localStorage.getItem('token');
     const adminData = localStorage.getItem('admin');
-    
+
     if (!token || !adminData) {
       navigate('/admin/login');
       return;
     }
-    
+
     setAdmin(JSON.parse(adminData));
   }, [navigate]);
 
@@ -408,7 +408,7 @@ function AdminDashboard() {
 
   // Renderizar contenido según sección activa
   const renderContenido = () => {
-    switch(seccionActiva) {
+    switch (seccionActiva) {
       case 'citas':
         return <GestionCitas />;
       case 'servicios':
@@ -431,9 +431,9 @@ function AdminDashboard() {
         <div className="navbar-content">
           <h1>HIGHBURY BARBER - ADMIN</h1>
           <nav style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
-            <div style={{ 
-              display: 'flex', 
-              alignItems: 'center', 
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
               gap: '0.5rem',
               padding: '0.5rem 1rem',
               background: 'var(--neutral-charcoal)',
@@ -445,8 +445,8 @@ function AdminDashboard() {
                 {admin.nombre}
               </span>
             </div>
-            <button 
-              onClick={handleLogout} 
+            <button
+              onClick={handleLogout}
               className="btn btn-danger"
               style={{ padding: '0.7rem 1.5rem' }}
             >
@@ -458,15 +458,15 @@ function AdminDashboard() {
 
       <div style={{ display: 'flex', minHeight: 'calc(100vh - 70px)' }}>
         {/* Sidebar Premium */}
-        <div style={{ 
-          width: '220px', 
+        <div style={{
+          width: '220px',
           background: 'var(--neutral-charcoal)',
           borderRight: '1px solid var(--neutral-gray)',
           padding: '2rem 0'
         }}>
           <div style={{ padding: '0 1rem', marginBottom: '2rem' }}>
-            <h3 style={{ 
-              color: 'var(--primary-gold)', 
+            <h3 style={{
+              color: 'var(--primary-gold)',
               fontSize: '1rem',
               textTransform: 'uppercase',
               letterSpacing: '1px',
@@ -475,11 +475,11 @@ function AdminDashboard() {
               Menú Principal
             </h3>
           </div>
-          
+
           <nav style={{ display: 'flex', flexDirection: 'column' }}>
-            <button 
+            <button
               onClick={() => setSeccionActiva('citas')}
-              style={{ 
+              style={{
                 color: seccionActiva === 'citas' ? 'var(--primary-gold)' : 'var(--neutral-light)',
                 background: 'transparent',
                 border: 'none',
@@ -499,10 +499,10 @@ function AdminDashboard() {
               <span style={{ fontSize: '1.2rem' }}>📅</span>
               <span>Citas</span>
             </button>
-            
-            <button 
+
+            <button
               onClick={() => setSeccionActiva('servicios')}
-              style={{ 
+              style={{
                 color: seccionActiva === 'servicios' ? 'var(--primary-gold)' : 'var(--neutral-light)',
                 background: 'transparent',
                 border: 'none',
@@ -522,10 +522,10 @@ function AdminDashboard() {
               <span style={{ fontSize: '1.2rem' }}>✂️</span>
               <span>Servicios</span>
             </button>
-            
-            <button 
+
+            <button
               onClick={() => setSeccionActiva('empleados')}
-              style={{ 
+              style={{
                 color: seccionActiva === 'empleados' ? 'var(--primary-gold)' : 'var(--neutral-light)',
                 background: 'transparent',
                 border: 'none',
@@ -545,10 +545,10 @@ function AdminDashboard() {
               <span style={{ fontSize: '1.2rem' }}>👥</span>
               <span>Empleados</span>
             </button>
-            
-            <button 
+
+            <button
               onClick={() => setSeccionActiva('bloqueos')}
-              style={{ 
+              style={{
                 color: seccionActiva === 'bloqueos' ? 'var(--primary-gold)' : 'var(--neutral-light)',
                 background: 'transparent',
                 border: 'none',
@@ -568,10 +568,10 @@ function AdminDashboard() {
               <span style={{ fontSize: '1.2rem' }}>🚫</span>
               <span>Bloqueos</span>
             </button>
-            
-            <button 
+
+            <button
               onClick={() => setSeccionActiva('reportes')}
-              style={{ 
+              style={{
                 color: seccionActiva === 'reportes' ? 'var(--primary-gold)' : 'var(--neutral-light)',
                 background: 'transparent',
                 border: 'none',
@@ -591,10 +591,10 @@ function AdminDashboard() {
               <span style={{ fontSize: '1.2rem' }}>📊</span>
               <span>Reportes</span>
             </button>
-            
-            <Link 
-              to="/" 
-              style={{ 
+
+            <Link
+              to="/"
+              style={{
                 color: 'var(--neutral-light)',
                 textDecoration: 'none',
                 padding: '0.9rem 1rem',
@@ -616,9 +616,9 @@ function AdminDashboard() {
         </div>
 
         {/* Contenido principal */}
-        <div style={{ 
-          flex: 1, 
-          padding: '2.5rem', 
+        <div style={{
+          flex: 1,
+          padding: '2.5rem',
           background: 'var(--bg-dark)',
           overflowY: 'auto'
         }}>

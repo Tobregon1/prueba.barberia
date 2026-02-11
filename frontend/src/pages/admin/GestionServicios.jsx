@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { serviciosAPI } from '../../services/api';
+import { formatCurrency } from '../../utils/formatters';
 
 function GestionServicios() {
   const [servicios, setServicios] = useState([]);
@@ -7,7 +8,7 @@ function GestionServicios() {
   const [mostrarForm, setMostrarForm] = useState(false);
   const [servicioEdit, setServicioEdit] = useState(null);
   const [mensaje, setMensaje] = useState('');
-  
+
   const [formData, setFormData] = useState({
     nombre: '',
     descripcion: '',
@@ -83,7 +84,7 @@ function GestionServicios() {
 
   const eliminarServicio = async (id) => {
     if (!confirm('¿Estás seguro de eliminar este servicio?')) return;
-    
+
     try {
       await serviciosAPI.eliminar(id);
       setMensaje('Servicio eliminado');
@@ -98,14 +99,14 @@ function GestionServicios() {
 
   return (
     <div className="fade-in">
-      <div style={{ 
-        display: 'flex', 
-        justifyContent: 'space-between', 
+      <div style={{
+        display: 'flex',
+        justifyContent: 'space-between',
         alignItems: 'center',
         marginBottom: '2rem'
       }}>
         <h2 style={{ margin: 0 }}>Gestión de Servicios</h2>
-        <button 
+        <button
           onClick={() => setMostrarForm(!mostrarForm)}
           className="btn btn-primary"
         >
@@ -143,7 +144,7 @@ function GestionServicios() {
                 />
               </div>
               <div className="form-group">
-                <label>Precio (COP) *</label>
+                <label>Precio (Pesos Argentinos) *</label>
                 <input
                   type="number"
                   name="precio"
@@ -155,7 +156,7 @@ function GestionServicios() {
                 />
               </div>
             </div>
-            
+
             <div className="form-group">
               <label>Descripción</label>
               <textarea
@@ -227,7 +228,7 @@ function GestionServicios() {
                 <tr key={servicio.id}>
                   <td>{servicio.id}</td>
                   <td style={{ fontWeight: '600' }}>{servicio.nombre}</td>
-                  <td style={{ 
+                  <td style={{
                     minWidth: '300px',
                     whiteSpace: 'normal',
                     wordWrap: 'break-word',
@@ -237,7 +238,7 @@ function GestionServicios() {
                   </td>
                   <td>{servicio.duracion} min</td>
                   <td style={{ color: 'var(--primary-gold)', fontWeight: '600' }}>
-                    ${parseFloat(servicio.precio).toLocaleString('es-CO')}
+                    {formatCurrency(servicio.precio)}
                   </td>
                   <td>
                     <span className={`badge badge-${servicio.activo ? 'success' : 'secondary'}`}>

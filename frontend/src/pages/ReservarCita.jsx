@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { serviciosAPI, empleadosAPI, disponibilidadAPI, citasAPI } from '../services/api';
+import { formatCurrency, getImageUrl } from '../utils/formatters';
 
 function ReservarCita() {
   const navigate = useNavigate();
@@ -360,7 +361,7 @@ function ReservarCita() {
                       borderTop: '1px solid var(--neutral-gray)'
                     }}>
                       <span className="price" style={{ fontSize: '1.8rem' }}>
-                        ${parseFloat(servicio.precio).toLocaleString('es-AR')}
+                        {formatCurrency(servicio.precio)}
                       </span>
                       <span className="duration">
                         ⏱️ {servicio.duracion} min
@@ -413,7 +414,7 @@ function ReservarCita() {
                       </div>
                     ) : empleado.foto ? (
                       <img
-                        src={`http://localhost:3000${empleado.foto}`}
+                        src={getImageUrl(empleado.foto)}
                         alt={empleado.nombre}
                         style={{
                           width: '100px',
@@ -764,7 +765,7 @@ function ReservarCita() {
                     <strong>Barbero:</strong> {empleados.find(e => e.id.toString() === formData.empleado_id)?.nombre}
                   </div>
                   <div>
-                    <strong>Fecha:</strong> {new Date(formData.fecha + 'T00:00:00').toLocaleDateString('es-CO', {
+                    <strong>Fecha:</strong> {new Date(formData.fecha + 'T00:00:00').toLocaleDateString('es-AR', {
                       weekday: 'long',
                       year: 'numeric',
                       month: 'long',
@@ -781,7 +782,7 @@ function ReservarCita() {
                     color: 'var(--primary-gold)',
                     fontWeight: 'bold'
                   }}>
-                    <strong>Total:</strong> ${parseFloat(servicios.find(s => s.id === formData.servicio_id)?.precio || 0).toLocaleString('es-AR')}
+                    <strong>Total:</strong> {formatCurrency(servicios.find(s => s.id === formData.servicio_id)?.precio)}
                   </div>
                 </div>
               </div>
