@@ -26,7 +26,19 @@ const PORT = process.env.PORT || 3000;
 
 // Middleware
 app.use(cors({
-    origin: process.env.FRONTEND_URL ? process.env.FRONTEND_URL.split(',') : 'http://localhost:5173',
+    origin: (origin, callback) => {
+        const allowedOrigins = process.env.FRONTEND_URL
+            ? process.env.FRONTEND_URL.split(',').map(url => url.trim().replace(/\/$/, ''))
+            : ['http://localhost:5173'];
+
+        // Si no hay origin (como en apps móviles o herramientas curl) o si el origin coincide
+        if (!origin || allowedOrigins.includes(origin.replace(/\/$/, ''))) {
+            callback(null, true);
+        } else {
+            console.log('CORS Blocked for origin:', origin);
+            callback(new Error('No permitido por CORS'));
+        }
+    },
     credentials: true
 }));
 app.use(express.json());
