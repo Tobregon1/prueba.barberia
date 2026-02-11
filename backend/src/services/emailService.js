@@ -41,7 +41,7 @@ export async function enviarEmailConfirmacion(cita) {
                     <p><strong>Hora:</strong> ${horaFormateada}</p>
                     <p><strong>Servicio:</strong> ${cita.servicio_nombre}</p>
                     <p><strong>Barbero:</strong> ${cita.empleado_nombre}</p>
-                    <p><strong>Precio:</strong> $${parseFloat(cita.servicio_precio).toLocaleString('es-CO')}</p>
+                    <p><strong>Precio:</strong> $${parseFloat(cita.servicio_precio).toLocaleString('es-AR')}</p>
                 </div>
                 
                 <p><strong class="highlight">Importante:</strong> Te enviaremos un recordatorio por WhatsApp 3 horas antes de tu cita.</p>
@@ -49,7 +49,7 @@ export async function enviarEmailConfirmacion(cita) {
             </div>
             <div class="footer">
                 <p>Gracias por preferirnos</p>
-                <p><strong>Highbury Barber</strong> - Bogotá, Colombia</p>
+                <p><strong>Highbury Barber</strong> - Argentina</p>
             </div>
         </div>
     </body>
@@ -110,7 +110,7 @@ export async function enviarEmailRecibo(cita) {
                     <p><strong>Servicio:</strong> ${cita.servicio_nombre}</p>
                     <p><strong>Atendido por:</strong> ${cita.empleado_nombre}</p>
                     <hr>
-                    <p class="total">Total Pagado: $${parseFloat(cita.servicio_precio).toLocaleString('es-CO')} COP</p>
+                    <p class="total">Total Pagado: $${parseFloat(cita.servicio_precio).toLocaleString('es-AR')} ARS</p>
                 </div>
                 
                 <p>¡Esperamos verte pronto nuevamente!</p>
@@ -118,7 +118,7 @@ export async function enviarEmailRecibo(cita) {
             </div>
             <div class="footer">
                 <p>Gracias por tu preferencia</p>
-                <p><strong>Highbury Barber</strong> - Bogotá, Colombia</p>
+                <p><strong>Highbury Barber</strong> - Argentina</p>
                 <p>WhatsApp: ${process.env.BARBERIA_WHATSAPP_NUMBER || 'Contacto disponible'}</p>
             </div>
         </div>

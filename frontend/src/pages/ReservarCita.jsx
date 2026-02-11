@@ -53,16 +53,16 @@ function ReservarCita() {
 
   const cargarDisponibilidad = async () => {
     if (!formData.fecha) return;
-    
+
     setLoading(true);
     try {
       const params = { fecha: formData.fecha };
       if (formData.empleado_id && formData.empleado_id !== '0') {
         params.empleado_id = formData.empleado_id;
       }
-      
+
       const response = await disponibilidadAPI.obtener(params);
-      
+
       if (response.data.disponible) {
         if (formData.empleado_id && formData.empleado_id !== '0') {
           setHorariosDisponibles(response.data.horarios || []);
@@ -103,7 +103,7 @@ function ReservarCita() {
     const lastDay = new Date(year, month + 1, 0);
     const daysInMonth = lastDay.getDate();
     const startDayOfWeek = firstDay.getDay();
-    
+
     return { daysInMonth, startDayOfWeek, year, month };
   };
 
@@ -162,19 +162,19 @@ function ReservarCita() {
 
     try {
       let empleadoFinal = formData.empleado_id;
-      
+
       if (empleadoFinal === '0') {
         const response = await disponibilidadAPI.obtener({ fecha: formData.fecha });
-        const empleadoDisponible = response.data.por_empleado?.find(e => 
+        const empleadoDisponible = response.data.por_empleado?.find(e =>
           e.horarios.some(h => h.hora === formData.hora && h.disponible)
         );
-        
+
         if (!empleadoDisponible) {
           setError('No hay empleados disponibles para este horario');
           setLoading(false);
           return;
         }
-        
+
         empleadoFinal = empleadoDisponible.empleado_id;
       }
 
@@ -202,10 +202,10 @@ function ReservarCita() {
             <h1>HIGHBURY BARBER</h1>
           </div>
         </nav>
-        <div className="container" style={{ 
-          maxWidth: '600px', 
-          textAlign: 'center', 
-          paddingTop: '5rem' 
+        <div className="container" style={{
+          maxWidth: '600px',
+          textAlign: 'center',
+          paddingTop: '5rem'
         }}>
           <div style={{
             background: 'var(--neutral-charcoal)',
@@ -253,9 +253,9 @@ function ReservarCita() {
         </h2>
 
         {/* Progress Stepper Premium */}
-        <div style={{ 
-          display: 'flex', 
-          justifyContent: 'space-between', 
+        <div style={{
+          display: 'flex',
+          justifyContent: 'space-between',
           marginBottom: '3rem',
           position: 'relative',
           paddingBottom: '1rem'
@@ -279,7 +279,7 @@ function ReservarCita() {
           </div>
 
           {['Servicio', 'Barbero', 'Fecha', 'Datos'].map((label, index) => (
-            <div key={index} style={{ 
+            <div key={index} style={{
               flex: 1,
               textAlign: 'center',
               position: 'relative',
@@ -289,9 +289,9 @@ function ReservarCita() {
                 width: '40px',
                 height: '40px',
                 borderRadius: '50%',
-                background: paso > index + 1 ? 'var(--primary-gold)' : 
-                           paso === index + 1 ? 'var(--primary-gold)' : 
-                           'var(--neutral-gray)',
+                background: paso > index + 1 ? 'var(--primary-gold)' :
+                  paso === index + 1 ? 'var(--primary-gold)' :
+                    'var(--neutral-gray)',
                 border: paso === index + 1 ? '3px solid var(--primary-gold-light)' : 'none',
                 color: 'var(--neutral-dark)',
                 display: 'flex',
@@ -333,14 +333,14 @@ function ReservarCita() {
               </h3>
               <div className="grid grid-2" style={{ gap: '1.5rem' }}>
                 {servicios.map((servicio) => (
-                  <div 
+                  <div
                     key={servicio.id}
                     onClick={() => setFormData({ ...formData, servicio_id: servicio.id })}
                     className="service-card"
                     style={{
                       cursor: 'pointer',
-                      border: formData.servicio_id === servicio.id ? 
-                        '2px solid var(--primary-gold)' : 
+                      border: formData.servicio_id === servicio.id ?
+                        '2px solid var(--primary-gold)' :
                         '1px solid var(--neutral-gray)',
                       transform: formData.servicio_id === servicio.id ? 'scale(1.02)' : 'scale(1)',
                       padding: '2rem'
@@ -352,15 +352,15 @@ function ReservarCita() {
                     <p style={{ fontSize: '0.95rem', marginBottom: '1.5rem' }}>
                       {servicio.descripcion}
                     </p>
-                    <div style={{ 
-                      display: 'flex', 
-                      justifyContent: 'space-between', 
+                    <div style={{
+                      display: 'flex',
+                      justifyContent: 'space-between',
                       alignItems: 'center',
                       paddingTop: '1rem',
                       borderTop: '1px solid var(--neutral-gray)'
                     }}>
                       <span className="price" style={{ fontSize: '1.8rem' }}>
-                        ${parseFloat(servicio.precio).toLocaleString('es-CO')}
+                        ${parseFloat(servicio.precio).toLocaleString('es-AR')}
                       </span>
                       <span className="duration">
                         ⏱️ {servicio.duracion} min
@@ -369,9 +369,9 @@ function ReservarCita() {
                   </div>
                 ))}
               </div>
-              <button 
-                onClick={siguientePaso} 
-                className="btn btn-primary" 
+              <button
+                onClick={siguientePaso}
+                className="btn btn-primary"
                 style={{ width: '100%', marginTop: '2rem', padding: '1.2rem' }}
               >
                 Continuar →
@@ -387,14 +387,14 @@ function ReservarCita() {
               </h3>
               <div className="grid grid-3" style={{ gap: '1.5rem' }}>
                 {empleados.map((empleado) => (
-                  <div 
+                  <div
                     key={empleado.id}
                     onClick={() => setFormData({ ...formData, empleado_id: empleado.id.toString() })}
                     style={{
                       padding: '2rem 1.5rem',
                       background: 'var(--neutral-dark)',
-                      border: formData.empleado_id === empleado.id.toString() ? 
-                        '2px solid var(--primary-gold)' : 
+                      border: formData.empleado_id === empleado.id.toString() ?
+                        '2px solid var(--primary-gold)' :
                         '1px solid var(--neutral-gray)',
                       borderRadius: '8px',
                       cursor: 'pointer',
@@ -404,16 +404,16 @@ function ReservarCita() {
                     }}
                   >
                     {empleado.id === 0 ? (
-                      <div style={{ 
-                        fontSize: '3.5rem', 
+                      <div style={{
+                        fontSize: '3.5rem',
                         marginBottom: '1rem',
                         filter: formData.empleado_id === empleado.id.toString() ? 'grayscale(0%)' : 'grayscale(30%)'
                       }}>
                         🎲
                       </div>
                     ) : empleado.foto ? (
-                      <img 
-                        src={`http://localhost:3000${empleado.foto}`} 
+                      <img
+                        src={`http://localhost:3000${empleado.foto}`}
                         alt={empleado.nombre}
                         style={{
                           width: '100px',
@@ -421,7 +421,7 @@ function ReservarCita() {
                           borderRadius: '50%',
                           objectFit: 'cover',
                           margin: '0 auto 1rem',
-                          border: '3px solid ' + (formData.empleado_id === empleado.id.toString() ? 
+                          border: '3px solid ' + (formData.empleado_id === empleado.id.toString() ?
                             'var(--primary-gold)' : 'var(--neutral-gray)'),
                           filter: formData.empleado_id === empleado.id.toString() ? 'grayscale(0%)' : 'grayscale(30%)'
                         }}
@@ -439,16 +439,16 @@ function ReservarCita() {
                         fontSize: '2.5rem',
                         fontWeight: 'bold',
                         color: 'var(--neutral-silver)',
-                        border: '3px solid ' + (formData.empleado_id === empleado.id.toString() ? 
+                        border: '3px solid ' + (formData.empleado_id === empleado.id.toString() ?
                           'var(--primary-gold)' : 'var(--neutral-gray)'),
                         filter: formData.empleado_id === empleado.id.toString() ? 'grayscale(0%)' : 'grayscale(30%)'
                       }}>
                         {empleado.nombre.charAt(0).toUpperCase()}
                       </div>
                     )}
-                    <h4 style={{ 
+                    <h4 style={{
                       fontSize: '1.1rem',
-                      color: formData.empleado_id === empleado.id.toString() ? 
+                      color: formData.empleado_id === empleado.id.toString() ?
                         'var(--primary-gold)' : 'var(--neutral-light)'
                     }}>
                       {empleado.nombre}
@@ -457,16 +457,16 @@ function ReservarCita() {
                 ))}
               </div>
               <div style={{ display: 'flex', gap: '1rem', marginTop: '2rem' }}>
-                <button 
-                  onClick={anteriorPaso} 
-                  className="btn btn-secondary" 
+                <button
+                  onClick={anteriorPaso}
+                  className="btn btn-secondary"
                   style={{ flex: 1, padding: '1.2rem' }}
                 >
                   ← Atrás
                 </button>
-                <button 
-                  onClick={siguientePaso} 
-                  className="btn btn-primary" 
+                <button
+                  onClick={siguientePaso}
+                  className="btn btn-primary"
                   style={{ flex: 2, padding: '1.2rem' }}
                 >
                   Continuar →
@@ -481,23 +481,23 @@ function ReservarCita() {
               <h3 style={{ marginBottom: '2rem', textAlign: 'center' }}>
                 Elegí Fecha y Hora
               </h3>
-              
+
               {/* Calendario Personalizado */}
-              <div style={{ 
-                background: 'var(--neutral-dark)', 
-                borderRadius: '12px', 
+              <div style={{
+                background: 'var(--neutral-dark)',
+                borderRadius: '12px',
                 padding: '1.5rem',
                 border: '1px solid var(--neutral-gray)',
                 marginBottom: '2rem'
               }}>
                 {/* Header del calendario */}
-                <div style={{ 
-                  display: 'flex', 
-                  justifyContent: 'space-between', 
+                <div style={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
                   alignItems: 'center',
                   marginBottom: '1.5rem'
                 }}>
-                  <button 
+                  <button
                     onClick={() => cambiarMes(-1)}
                     style={{
                       background: 'transparent',
@@ -512,15 +512,15 @@ function ReservarCita() {
                   >
                     ←
                   </button>
-                  <h4 style={{ 
-                    color: 'var(--primary-gold)', 
+                  <h4 style={{
+                    color: 'var(--primary-gold)',
                     margin: 0,
                     fontSize: '1.2rem',
                     letterSpacing: '1px'
                   }}>
                     {mesActual.toLocaleDateString('es', { month: 'long', year: 'numeric' }).toUpperCase()}
                   </h4>
-                  <button 
+                  <button
                     onClick={() => cambiarMes(1)}
                     style={{
                       background: 'transparent',
@@ -538,15 +538,15 @@ function ReservarCita() {
                 </div>
 
                 {/* Días de la semana */}
-                <div style={{ 
-                  display: 'grid', 
-                  gridTemplateColumns: 'repeat(7, 1fr)', 
+                <div style={{
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(7, 1fr)',
                   gap: '0.5rem',
                   marginBottom: '0.5rem'
                 }}>
                   {['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'].map(day => (
-                    <div key={day} style={{ 
-                      textAlign: 'center', 
+                    <div key={day} style={{
+                      textAlign: 'center',
                       color: 'var(--neutral-silver)',
                       fontSize: '0.85rem',
                       fontWeight: '600',
@@ -558,28 +558,28 @@ function ReservarCita() {
                 </div>
 
                 {/* Días del mes */}
-                <div style={{ 
-                  display: 'grid', 
-                  gridTemplateColumns: 'repeat(7, 1fr)', 
+                <div style={{
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(7, 1fr)',
                   gap: '0.5rem'
                 }}>
                   {(() => {
                     const { daysInMonth, startDayOfWeek } = getDaysInMonth(mesActual);
                     const days = [];
-                    
+
                     // Espacios vacíos antes del primer día
                     for (let i = 0; i < startDayOfWeek; i++) {
                       days.push(
                         <div key={`empty-${i}`} style={{ padding: '1rem' }}></div>
                       );
                     }
-                    
+
                     // Días del mes
                     for (let day = 1; day <= daysInMonth; day++) {
                       const fechaCompleta = formatDate(day);
                       const isSelected = formData.fecha === fechaCompleta;
                       const isDisabled = isDateDisabled(day);
-                      
+
                       days.push(
                         <div
                           key={day}
@@ -588,8 +588,8 @@ function ReservarCita() {
                             padding: '1rem',
                             textAlign: 'center',
                             background: isSelected ? 'var(--primary-gold)' : 'transparent',
-                            color: isSelected ? 'var(--neutral-dark)' : 
-                                   isDisabled ? 'var(--neutral-gray)' : 'var(--neutral-light)',
+                            color: isSelected ? 'var(--neutral-dark)' :
+                              isDisabled ? 'var(--neutral-gray)' : 'var(--neutral-light)',
                             borderRadius: '8px',
                             cursor: isDisabled ? 'not-allowed' : 'pointer',
                             fontWeight: isSelected ? '700' : '500',
@@ -621,7 +621,7 @@ function ReservarCita() {
                         </div>
                       );
                     }
-                    
+
                     return days;
                   })()}
                 </div>
@@ -637,14 +637,14 @@ function ReservarCita() {
                   ) : horariosDisponibles.length > 0 ? (
                     <div className="grid grid-4" style={{ gap: '1rem' }}>
                       {horariosDisponibles.map((horario) => (
-                        <div 
+                        <div
                           key={horario.hora}
                           onClick={() => setFormData({ ...formData, hora: horario.hora })}
                           style={{
                             padding: '1.2rem',
                             background: formData.hora === horario.hora ? 'var(--primary-gold)' : 'var(--neutral-dark)',
-                            border: formData.hora === horario.hora ? 
-                              '2px solid var(--primary-gold-light)' : 
+                            border: formData.hora === horario.hora ?
+                              '2px solid var(--primary-gold-light)' :
                               '1px solid var(--neutral-gray)',
                             borderRadius: '6px',
                             cursor: 'pointer',
@@ -669,16 +669,16 @@ function ReservarCita() {
               )}
 
               <div style={{ display: 'flex', gap: '1rem', marginTop: '2rem' }}>
-                <button 
-                  onClick={anteriorPaso} 
-                  className="btn btn-secondary" 
+                <button
+                  onClick={anteriorPaso}
+                  className="btn btn-secondary"
                   style={{ flex: 1, padding: '1.2rem' }}
                 >
                   ← Atrás
                 </button>
-                <button 
-                  onClick={siguientePaso} 
-                  className="btn btn-primary" 
+                <button
+                  onClick={siguientePaso}
+                  className="btn btn-primary"
                   style={{ flex: 2, padding: '1.2rem' }}
                   disabled={!formData.fecha || !formData.hora}
                 >
@@ -694,12 +694,12 @@ function ReservarCita() {
               <h3 style={{ marginBottom: '2rem', textAlign: 'center' }}>
                 Completá Tus Datos
               </h3>
-              
+
               <div className="form-row">
                 <div className="form-group">
                   <label>Nombre Completo *</label>
-                  <input 
-                    type="text" 
+                  <input
+                    type="text"
                     name="cliente_nombre"
                     value={formData.cliente_nombre}
                     onChange={handleChange}
@@ -709,8 +709,8 @@ function ReservarCita() {
                 </div>
                 <div className="form-group">
                   <label>Cédula *</label>
-                  <input 
-                    type="text" 
+                  <input
+                    type="text"
                     name="cliente_cedula"
                     value={formData.cliente_cedula}
                     onChange={handleChange}
@@ -723,8 +723,8 @@ function ReservarCita() {
               <div className="form-row">
                 <div className="form-group">
                   <label>Email *</label>
-                  <input 
-                    type="email" 
+                  <input
+                    type="email"
                     name="cliente_email"
                     value={formData.cliente_email}
                     onChange={handleChange}
@@ -734,8 +734,8 @@ function ReservarCita() {
                 </div>
                 <div className="form-group">
                   <label>Teléfono (WhatsApp) *</label>
-                  <input 
-                    type="tel" 
+                  <input
+                    type="tel"
                     name="cliente_telefono"
                     value={formData.cliente_telefono}
                     onChange={handleChange}
@@ -764,41 +764,41 @@ function ReservarCita() {
                     <strong>Barbero:</strong> {empleados.find(e => e.id.toString() === formData.empleado_id)?.nombre}
                   </div>
                   <div>
-                    <strong>Fecha:</strong> {new Date(formData.fecha + 'T00:00:00').toLocaleDateString('es-CO', { 
-                      weekday: 'long', 
-                      year: 'numeric', 
-                      month: 'long', 
-                      day: 'numeric' 
+                    <strong>Fecha:</strong> {new Date(formData.fecha + 'T00:00:00').toLocaleDateString('es-CO', {
+                      weekday: 'long',
+                      year: 'numeric',
+                      month: 'long',
+                      day: 'numeric'
                     })}
                   </div>
                   <div>
                     <strong>Hora:</strong> {formData.hora.substring(0, 5)}
                   </div>
-                  <div style={{ 
-                    paddingTop: '1rem', 
+                  <div style={{
+                    paddingTop: '1rem',
                     borderTop: '1px solid var(--neutral-gray)',
                     fontSize: '1.3rem',
                     color: 'var(--primary-gold)',
                     fontWeight: 'bold'
                   }}>
-                    <strong>Total:</strong> ${parseFloat(servicios.find(s => s.id === formData.servicio_id)?.precio || 0).toLocaleString('es-CO')}
+                    <strong>Total:</strong> ${parseFloat(servicios.find(s => s.id === formData.servicio_id)?.precio || 0).toLocaleString('es-AR')}
                   </div>
                 </div>
               </div>
 
               <div style={{ display: 'flex', gap: '1rem', marginTop: '2rem' }}>
-                <button 
+                <button
                   type="button"
-                  onClick={anteriorPaso} 
-                  className="btn btn-secondary" 
+                  onClick={anteriorPaso}
+                  className="btn btn-secondary"
                   style={{ flex: 1, padding: '1.2rem' }}
                 >
                   ← Atrás
                 </button>
-                <button 
-                  type="submit" 
-                  className="btn btn-primary" 
-                  style={{ flex: 2, padding: '1.2rem' }} 
+                <button
+                  type="submit"
+                  className="btn btn-primary"
+                  style={{ flex: 2, padding: '1.2rem' }}
                   disabled={loading}
                 >
                   {loading ? 'Procesando...' : '✓ Confirmar Reserva'}

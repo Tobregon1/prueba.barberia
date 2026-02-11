@@ -202,40 +202,53 @@ UPDATE hora_inicio =
 VALUES(hora_inicio),
     hora_fin =
 VALUES(hora_fin);
--- DÃ­as festivos de Colombia 2025
-INSERT INTO dias_festivos (fecha, descripcion)
-VALUES ('2025-01-01', 'AÃ±o Nuevo'),
-    ('2025-01-06', 'DÃ­a de los Reyes Magos'),
-    ('2025-03-24', 'DÃ­a de San JosÃ©'),
-    ('2025-04-17', 'Jueves Santo'),
-    ('2025-04-18', 'Viernes Santo'),
-    ('2025-05-01', 'DÃ­a del Trabajo'),
-    ('2025-06-02', 'AscensiÃ³n del SeÃ±or'),
-    ('2025-06-23', 'Corpus Christi'),
-    ('2025-06-30', 'Sagrado CorazÃ³n'),
-    ('2025-07-07', 'San Pedro y San Pablo'),
-    ('2025-07-20', 'DÃ­a de la Independencia'),
-    ('2025-08-07', 'Batalla de BoyacÃ¡'),
-    ('2025-08-18', 'AsunciÃ³n de la Virgen'),
-    ('2025-10-13', 'DÃ­a de la Raza'),
-    ('2025-11-03', 'Todos los Santos'),
-    ('2025-11-17', 'Independencia de Cartagena'),
-    ('2025-12-08', 'Inmaculada ConcepciÃ³n'),
-    ('2025-12-25', 'Navidad') ON DUPLICATE KEY
-UPDATE descripcion =
-VALUES(descripcion);
--- ============================================================
--- VERIFICACIÃ“N DE INSTALACIÃ“N
--- ============================================================
-SELECT 'Base de datos creada exitosamente' AS mensaje;
-SELECT COUNT(*) AS total_administradores
-FROM administradores;
 SELECT COUNT(*) AS total_empleados
 FROM empleados;
 SELECT COUNT(*) AS total_servicios
 FROM servicios;
 SELECT COUNT(*) AS total_horarios
 FROM horarios;
+-- Días festivos de Argentina 2025
+INSERT INTO dias_festivos (fecha, descripcion)
+VALUES ('2025-01-01', 'Año Nuevo'),
+    ('2025-03-03', 'Carnaval'),
+    ('2025-03-04', 'Carnaval'),
+    (
+        '2025-03-24',
+        'Día Nacional de la Memoria por la Verdad y la Justicia'
+    ),
+    (
+        '2025-04-02',
+        'Día del Veterano y de los Caídos en la Guerra de Malvinas'
+    ),
+    ('2025-04-18', 'Viernes Santo'),
+    ('2025-05-01', 'Día del Trabajador'),
+    ('2025-05-25', 'Día de la Revolución de Mayo'),
+    (
+        '2025-06-16',
+        'Paso a la Inmortalidad del Gral. Güemes'
+    ),
+    (
+        '2025-06-20',
+        'Paso a la Inmortalidad del Gral. Manuel Belgrano'
+    ),
+    ('2025-07-09', 'Día de la Independencia'),
+    (
+        '2025-08-15',
+        'Paso a la Inmortalidad del Gral. José de San Martín'
+    ),
+    (
+        '2025-10-13',
+        'Día del Respeto a la Diversidad Cultural'
+    ),
+    ('2025-11-20', 'Día de la Soberanía Nacional'),
+    (
+        '2025-12-08',
+        'Día de la Inmaculada Concepción de María'
+    ),
+    ('2025-12-25', 'Navidad') ON DUPLICATE KEY
+UPDATE descripcion =
+VALUES(descripcion);
 SELECT COUNT(*) AS total_dias_festivos
 FROM dias_festivos;
 -- ============================================================

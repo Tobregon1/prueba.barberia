@@ -49,7 +49,7 @@ function Home() {
         <h2 style={{ textAlign: 'center', marginBottom: '3rem', marginTop: '4rem' }}>
           Nuestros Servicios
         </h2>
-        
+
         {loading ? (
           <div className="loading">Cargando servicios exclusivos...</div>
         ) : (
@@ -61,7 +61,7 @@ function Home() {
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
                   <div>
                     <div className="price">
-                      ${parseFloat(servicio.precio).toLocaleString('es-CO')}
+                      ${parseFloat(servicio.precio).toLocaleString('es-AR')}
                     </div>
                     <div className="duration">
                       ⏱️ {servicio.duracion} minutos
@@ -80,38 +80,38 @@ function Home() {
           <h2 style={{ textAlign: 'center', marginBottom: '3rem' }}>
             La Experiencia Highbury
           </h2>
-          
+
           <div className="features-grid">
             <div className="feature-card">
               <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>👨‍💼</div>
               <h4>Maestros Barberos</h4>
               <p>Profesionales certificados con años de experiencia en técnicas clásicas y modernas</p>
             </div>
-            
+
             <div className="feature-card">
               <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>✨</div>
               <h4>Productos Premium</h4>
               <p>Utilizamos únicamente productos de las mejores marcas internacionales</p>
             </div>
-            
+
             <div className="feature-card">
               <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>⏱</div>
               <h4>Horarios Flexibles</h4>
               <p>Lunes a Sábado de 10:00 AM a 6:00 PM. Reservá tu turno con facilidad</p>
             </div>
-            
+
             <div className="feature-card">
               <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>🏆</div>
               <h4>Ambiente Exclusivo</h4>
               <p>Un espacio diseñado para tu comodidad y relajación total</p>
             </div>
-            
+
             <div className="feature-card">
               <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>📱</div>
               <h4>Sistema Digital</h4>
               <p>Reservá online 24/7 y recibí recordatorios automáticos</p>
             </div>
-            
+
             <div className="feature-card">
               <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>💎</div>
               <h4>Atención Personalizada</h4>
@@ -135,8 +135,8 @@ function Home() {
       </div>
 
       {/* Footer */}
-      <footer style={{ 
-        background: 'var(--neutral-dark)', 
+      <footer style={{
+        background: 'var(--neutral-dark)',
         borderTop: '1px solid var(--primary-gold)',
         padding: '3rem 2rem',
         textAlign: 'center'
@@ -146,7 +146,7 @@ function Home() {
             HIGHBURY BARBER
           </h3>
           <p style={{ color: 'var(--neutral-silver)', marginBottom: '1rem' }}>
-            Bogotá, Colombia • Lun - Sáb: 10:00 - 18:00
+            Corrientes, Argentina • Lun - Sáb: 10:00 - 18:00
           </p>
           <p style={{ color: 'var(--neutral-gray)', fontSize: '0.9rem' }}>
             © 2025 Highbury Barber. Todos los derechos reservados.
